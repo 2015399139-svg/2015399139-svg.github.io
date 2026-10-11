@@ -1,0 +1,166 @@
+@import 'tailwindcss';
+
+/**
+ * 全站统一色轴：深暖底 + 橙红高光，与首页首屏同一套。
+ * `--page-rgb` 用于区块衔接渐变，避免各组件手写不一致。
+ */
+:root {
+  --page-rgb: 20 10 7;
+  --page-deep-rgb: 10 4 2;
+  --accent-teal-rgb: 253 38 1;
+  --accent-cyan-rgb: 243 126 28;
+  --accent-indigo-rgb: 168 58 18;
+}
+
+@theme {
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --color-surface: #140a07;
+  --color-surface-elevated: #1e110c;
+  --color-surface-soft: #100705;
+  --color-border-subtle: rgba(253, 38, 1, 0.16);
+  --color-text-muted: #d7c2b4;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: var(--font-sans);
+  background: #140a07;
+  color: #fff6ef;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+html.mc-brand-case body,
+html.mono-ape-nebula body,
+html.tech-3d-portfolio body {
+  background: #140a07;
+  color: #fff6ef;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-anton {
+  font-family: Anton, Impact, Haettenschweiler, sans-serif;
+}
+
+.hero-poster-type {
+  background-image: linear-gradient(
+    102deg,
+    rgba(255, 246, 239, 0.92) 0%,
+    #fff6ef 36%,
+    #ffffff 47%,
+    #ffe4d4 51%,
+    #fff6ef 62%,
+    rgba(255, 246, 239, 0.9) 100%
+  );
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(110, 24, 0, 0.28));
+  animation: shiny-sweep 8.5s ease-in-out infinite;
+}
+
+.hero-poster-type-still {
+  animation: none;
+  background-position: 42% 0;
+}
+
+.hero-stage,
+.hero-nav {
+  font-family: Inter, var(--font-sans);
+}
+
+.hero-stage ::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+.shiny-text {
+  background-image: linear-gradient(
+    110deg,
+    #fff6ef 0%,
+    #fff6ef 38%,
+    #ffffff 48%,
+    #ffd7c2 54%,
+    #fff6ef 70%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shiny-sweep 3.6s linear infinite;
+}
+
+.shiny-text-still {
+  animation: none;
+  background-position: 40% 0;
+}
+
+@keyframes shiny-sweep {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* 首页接在橙色首屏之后：同一暖色轴，只是把饱和度收进深暖底，避免青冷色跳切。 */
+.home-canvas {
+  --page-rgb: 20 10 7;
+  --page-deep-rgb: 10 4 2;
+  --accent-teal-rgb: 253 38 1;
+  --accent-cyan-rgb: 243 126 28;
+  --accent-indigo-rgb: 168 58 18;
+  --color-surface: #140a07;
+  --color-surface-elevated: #1e110c;
+  --color-surface-soft: #100705;
+  --color-text-muted: #d7c2b4;
+  color: #fff6ef;
+  font-family: Inter, var(--font-sans);
+  background: #140a07;
+}
+
+.home-canvas ::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
