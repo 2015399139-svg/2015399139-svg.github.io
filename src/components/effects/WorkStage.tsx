@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { studioPieces, studioProjects, type StudioPiece } from '../../data/studio'
 import type { PortfolioProject } from '../../data/profile'
+import { WarmParticles } from './WarmParticles'
 
 const pieces = studioPieces
 const projects = studioProjects
@@ -121,7 +122,7 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
         ref={stageRef}
         className="pointer-events-none relative mx-auto mt-2 h-[26rem] max-w-[76rem] overflow-hidden touch-pan-y select-none sm:h-[30rem] md:h-[36rem]"
       >
-        {!reduce ? <WorkDust /> : null}
+        {!reduce ? <WarmParticles mode="stage" /> : null}
         <div
           className="pointer-events-none absolute bottom-[18%] left-1/2 z-0 h-28 w-[min(70%,36rem)] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(253,38,1,0.28),rgba(243,126,28,0.12)_42%,transparent_70%)] blur-2xl"
           aria-hidden
@@ -203,97 +204,5 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
         </button>
       </div>
     </div>
-  )
-}
-
-/** 暖色微粒：在展台里缓慢上升、被中心吸一点，类似片里的光尘。 */
-function WorkDust() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    let w = 0
-    let h = 0
-    let raf = 0
-    let visible = true
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
-
-    type Dot = { x: number; y: number; vx: number; vy: number; r: number; a: number }
-    let dots: Dot[] = []
-
-    const fit = () => {
-      const box = canvas.getBoundingClientRect()
-      w = Math.max(1, box.width)
-      h = Math.max(1, box.height)
-      canvas.width = w * dpr
-      canvas.height = h * dpr
-      canvas.style.width = `${w}px`
-      canvas.style.height = `${h}px`
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      const n = w < 640 ? 42 : 88
-      if (dots.length !== n) {
-        dots = Array.from({ length: n }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.28,
-          vy: -0.12 - Math.random() * 0.35,
-          r: 0.6 + Math.random() * 1.8,
-          a: 0.18 + Math.random() * 0.45,
-        }))
-      }
-    }
-
-    const tick = () => {
-      if (!visible) {
-        raf = requestAnimationFrame(tick)
-        return
-      }
-      ctx.clearRect(0, 0, w, h)
-      const cx = w * 0.5
-      const cy = h * 0.48
-      for (const d of dots) {
-        d.vx += (cx - d.x) * 0.00004
-        d.vy += (cy - d.y) * 0.000015
-        d.x += d.vx
-        d.y += d.vy
-        if (d.y < -6) {
-          d.y = h + 4
-          d.x = Math.random() * w
-        }
-        if (d.x < -8) d.x = w + 4
-        if (d.x > w + 8) d.x = -4
-        ctx.beginPath()
-        ctx.fillStyle = `rgba(255, 176, 120, ${d.a})`
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2)
-        ctx.fill()
-      }
-      raf = requestAnimationFrame(tick)
-    }
-
-    fit()
-    const ro = new ResizeObserver(fit)
-    ro.observe(canvas)
-    const io = new IntersectionObserver(([entry]) => {
-      visible = !!entry?.isIntersecting
-    })
-    io.observe(canvas)
-    raf = requestAnimationFrame(tick)
-    return () => {
-      cancelAnimationFrame(raf)
-      ro.disconnect()
-      io.disconnect()
-    }
-  }, [])
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="pointer-events-none absolute inset-0 z-0"
-      aria-hidden
-    />
   )
 }
