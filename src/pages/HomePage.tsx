@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Contact } from '../components/Contact'
 import { Hero } from '../components/Hero'
 import { TracingBeam } from '../components/effects/TracingBeam'
+import { WarmParticles } from '../components/effects/WarmParticles'
 
 const StickyReveal = lazy(() =>
   import('../components/effects/StickyReveal').then((m) => ({ default: m.StickyReveal })),
@@ -29,6 +30,7 @@ export function HomePage() {
         className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(253,38,1,0.06)_0%,transparent_28%,transparent_62%,rgba(243,126,28,0.04)_100%)]"
         aria-hidden
       />
+      <WarmParticles mode="page" />
 
       <div className="relative z-[2]">
         <Hero />
