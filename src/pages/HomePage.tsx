@@ -1,11 +1,13 @@
-import { useLayoutEffect } from 'react'
+import { lazy, Suspense, useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Contact } from '../components/Contact'
 import { Hero } from '../components/Hero'
-import { Projects } from '../components/Projects'
-import { PointerGlow } from '../components/effects/PointerGlow'
-import { StickyReveal } from '../components/effects/StickyReveal'
 import { TracingBeam } from '../components/effects/TracingBeam'
+
+const StickyReveal = lazy(() =>
+  import('../components/effects/StickyReveal').then((m) => ({ default: m.StickyReveal })),
+)
+const Projects = lazy(() => import('../components/Projects').then((m) => ({ default: m.Projects })))
 
 export function HomePage() {
   const { hash } = useLocation()
@@ -29,15 +31,16 @@ export function HomePage() {
       />
 
       <div className="relative z-[2]">
-        <PointerGlow />
         <Hero />
         <div
           className="pointer-events-none h-10 bg-gradient-to-b from-[#f37e1c] via-[#5c180c] to-[#140a07] sm:h-16 md:h-20"
           aria-hidden
         />
         <TracingBeam>
-          <StickyReveal />
-          <Projects />
+          <Suspense fallback={null}>
+            <StickyReveal />
+            <Projects />
+          </Suspense>
           <Contact />
         </TracingBeam>
       </div>

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="image" href="/images/hero-portrait.jpg" fetchpriority="high" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#140a07" />
     <meta
@@ -12,12 +13,6 @@
     <meta
       name="description"
       content="个人作品集 — 交互、动效与创意开发的展示空间"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Inter:wght@400;500;600;700&family=Syne:wght@500..800&display=swap"
-      rel="stylesheet"
     />
     <title>作品集 · Portfolio</title>
   </head>
@@ -34,12 +29,9 @@
           color: #e2e8f0;
           background: #140a07;
           text-align: center;
-          line-height: 1.6;
         "
       >
-        <div>
-          <p style="margin: 0; font-weight: 500">正在加载作品集…</p>
-        </div>
+        <p style="margin: 0; font-weight: 500">正在加载作品集…</p>
       </div>
     </div>
     <script>
@@ -47,10 +39,7 @@
         if (location.protocol === 'file:') {
           var r = document.getElementById('root')
           if (r) {
-            r.innerHTML =
-              '<div style="min-height:100svh;display:flex;align-items:center;justify-content:center;padding:2rem;font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0;text-align:center;line-height:1.5">' +
-              '<p style="margin:0;max-width:22rem;color:#cbd5f5">请通过正式部署地址或站点服务打开本站，不要使用本地文件方式打开。</p>' +
-              '</div>'
+            r.textContent = '请通过正式部署地址打开本站。'
           }
         }
       })()

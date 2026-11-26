@@ -7,13 +7,10 @@ import {
   useTransform,
 } from 'framer-motion'
 import { useRef, type PointerEvent as ReactPointerEvent } from 'react'
-import { BlurText } from './bits/BlurText'
 import { Lanyard } from './effects/Lanyard'
 import { profile, publicAsset } from '../data/profile'
 
-const portraitSrc = `${publicAsset('images/hero-portrait.jpg')}?v=2`
-
-const titleWords = ['Personal', 'Portfolio'] as const
+const portraitSrc = publicAsset('images/hero-portrait.jpg')
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function Hero() {
@@ -27,10 +24,10 @@ export function Hero() {
     target: ref,
     offset: ['start start', 'end start'],
   })
-  const leaveY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 72])
-  const leaveOpacity = useTransform(scrollYProgress, [0, 0.8], reduce ? [1, 1] : [1, 0.2])
-  const leaveScale = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [1, 0.94])
-  const titleX = useTransform(sx, [-0.5, 0.5], reduce ? [0, 0] : [18, -18])
+  const leaveY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 56])
+  const leaveOpacity = useTransform(scrollYProgress, [0, 0.8], reduce ? [1, 1] : [1, 0.28])
+  const leaveScale = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [1, 0.96])
+  const titleX = useTransform(sx, [-0.5, 0.5], reduce ? [0, 0] : [10, -10])
 
   function onMove(e: ReactPointerEvent<HTMLElement>) {
     if (reduce || !ref.current) return
@@ -49,89 +46,93 @@ export function Hero() {
       ref={ref}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      className="hero-stage relative isolate flex min-h-svh flex-col overflow-hidden bg-gradient-to-b from-[#fd2601] to-[#f37e1c] text-white supports-[height:100dvh]:min-h-dvh"
+      className="hero-stage relative isolate flex min-h-svh flex-col overflow-hidden text-white supports-[height:100dvh]:min-h-dvh"
     >
-      <motion.div
-        className="pointer-events-none absolute bottom-16 right-[-2rem] z-[1] size-[220px] rounded-full bg-[#F4791B] opacity-60 mix-blend-screen blur-[80px] sm:size-[300px]"
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_18%,rgba(255,214,186,0.22),transparent_56%),linear-gradient(180deg,#ff2a08_0%,#fd2601_38%,#f37e1c_100%)]"
         aria-hidden
-        animate={reduce ? undefined : { x: [0, -28, 0], y: [0, -18, 0], scale: [1, 1.08, 1] }}
-        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut' }}
       />
-      <motion.div
-        className="pointer-events-none absolute bottom-10 left-[-4rem] z-[1] h-[220px] w-[420px] rounded-full bg-[#F4791B] opacity-60 mix-blend-screen blur-[80px] sm:h-[300px] sm:w-[600px]"
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-40 bg-gradient-to-b from-black/15 to-transparent"
         aria-hidden
-        animate={reduce ? undefined : { x: [0, 40, 0], y: [0, 16, 0], scale: [1, 1.06, 1] }}
-        transition={{ duration: 17, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-36 bg-gradient-to-t from-[#c45110]/45 to-transparent"
+        aria-hidden
       />
 
       <motion.div
-        className="relative z-20 mt-12 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-14 sm:px-4"
+        className="relative z-20 mt-14 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-16 sm:px-4"
         style={{ y: leaveY, opacity: leaveOpacity, scale: leaveScale }}
       >
-        <div className="relative w-full">
-          <motion.h1
-            style={{ x: titleX }}
-            className="pointer-events-none absolute left-1/2 top-[56%] z-0 w-[min(100vw,42rem)] -translate-x-1/2 -translate-y-1/2 text-center font-anton uppercase leading-[0.9] tracking-[0.04em] text-white/90 sm:top-[62%] sm:w-screen sm:leading-none sm:tracking-[0.06em] sm:text-white sm:[mask-image:linear-gradient(90deg,transparent,black_7%,black_93%,transparent)]"
+        <motion.div style={{ x: titleX }} className="relative flex w-full flex-col">
+          <h1 className="sr-only">Personal Portfolio</h1>
+          <motion.p
+            aria-hidden
+            className="hero-display-word relative z-0 mb-[-0.35rem] sm:mb-[-0.5rem]"
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.08, ease }}
           >
-            <span className="inline-block overflow-hidden align-bottom">
-              <motion.span
-                className="relative inline-block text-[clamp(2.35rem,11.5vw,8.4rem)] will-change-transform"
-                initial={reduce ? false : { y: '115%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: reduce ? 0 : 0.9, delay: reduce ? 0 : 0.08, ease }}
-              >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 translate-x-[0.018em] translate-y-[0.028em] text-transparent [-webkit-text-stroke:0.6px_rgba(255,246,239,0.38)]"
-                >
-                  <span className="block sm:inline">{titleWords[0]}</span>
-                  <span className="hidden sm:inline"> </span>
-                  <span className="block sm:inline">{titleWords[1]}</span>
-                </span>
-                <span className={reduce ? 'hero-poster-type hero-poster-type-still' : 'hero-poster-type'}>
-                  <span className="block sm:inline">{titleWords[0]}</span>
-                  <span className="hidden sm:inline"> </span>
-                  <span className="block sm:inline">{titleWords[1]}</span>
-                </span>
-              </motion.span>
-            </span>
-          </motion.h1>
-          <div className="relative z-10">
+            Personal
+          </motion.p>
+          <div className="relative z-10 w-full">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} />
           </div>
-        </div>
+          <motion.p
+            aria-hidden
+            className="hero-display-word relative z-0 mt-[-1.35rem] sm:mt-[-1.85rem]"
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.16, ease }}
+          >
+            Portfolio
+          </motion.p>
+        </motion.div>
       </motion.div>
 
-      <div className="relative z-30 mx-auto mt-1 w-full max-w-6xl px-5 pb-1 sm:mt-4 sm:px-6">
+      <div className="relative z-30 mx-auto w-full max-w-6xl px-5 pb-2 sm:px-8">
         <motion.div
           id="about"
-          className="max-w-none text-left text-pretty text-white sm:max-w-md"
-          initial={reduce ? false : { opacity: 0, y: 28 }}
+          className="flex flex-col gap-4 border-t border-white/15 pt-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8 sm:pt-5"
+          initial={reduce ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : 0.55, ease }}
+          transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : 0.45, ease }}
         >
-          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/80">
-            // {profile.name}
-          </p>
-          <BlurText
-            text={profile.bio}
-            delay={0.15}
-            className="mt-2 block text-[12.5px] font-normal normal-case leading-relaxed tracking-normal text-white/95 sm:text-[13px]"
-          />
-          <div className="mt-4 space-y-2.5 text-[12px] leading-relaxed tracking-normal text-white/90 sm:mt-5 sm:text-[13px]">
-            <p>
-              <span className="text-white/65">工具 </span>
-              {profile.tools.join(' · ')}
+          <div className="max-w-md">
+            <p className="text-[10px] font-medium uppercase tracking-[0.32em] text-white/75">
+              {profile.name}
             </p>
-            <p>
-              <span className="text-white/65">技能 </span>
-              {profile.skills.join(' · ')}
+            <p className="mt-2 text-[13px] font-normal leading-[1.75] tracking-[0.01em] text-white/92 sm:text-[14px]">
+              {profile.bio}
+            </p>
+          </div>
+          <div className="flex max-w-xl flex-col gap-2 sm:items-end">
+            <p className="flex flex-wrap gap-1.5 sm:justify-end">
+              {profile.tools.map((tool) => (
+                <span
+                  key={tool}
+                  className="rounded-full border border-white/28 bg-white/[0.08] px-2.5 py-[5px] text-[10px] font-medium tracking-[0.06em] text-white/92"
+                >
+                  {tool}
+                </span>
+              ))}
+            </p>
+            <p className="flex flex-wrap gap-1.5 sm:justify-end">
+              {profile.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full bg-black/12 px-2.5 py-[5px] text-[10px] tracking-[0.08em] text-white/78"
+                >
+                  {skill}
+                </span>
+              ))}
             </p>
           </div>
         </motion.div>
       </div>
 
-      <div className="h-[max(0.85rem,env(safe-area-inset-bottom))] sm:h-[max(1.25rem,env(safe-area-inset-bottom))]" />
+      <div className="h-[max(0.9rem,env(safe-area-inset-bottom))] sm:h-[max(1.35rem,env(safe-area-inset-bottom))]" />
     </section>
   )
 }

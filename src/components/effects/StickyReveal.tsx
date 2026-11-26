@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { publicAsset } from '../../data/profile'
+import { profile, publicAsset } from '../../data/profile'
 
 const steps = [
   {
@@ -32,6 +32,8 @@ const steps = [
   },
 ] as const
 
+const ticker = [...profile.tools, ...profile.skills, ...profile.tools, ...profile.skills]
+
 /** 能力 + 工具：橙英雄区落下后，用四件作品对齐叙事。 */
 export function StickyReveal() {
   const reduce = useReducedMotion()
@@ -39,8 +41,29 @@ export function StickyReveal() {
   return (
     <section
       id="motion"
-      className="relative scroll-mt-24 bg-gradient-to-b from-[#2a120c] via-[#140a07] to-[#140a07] py-12 md:py-24"
+      className="relative scroll-mt-24 overflow-hidden bg-gradient-to-b from-[#2a120c] via-[#140a07] to-[#140a07] py-12 md:py-24"
     >
+      <p
+        aria-hidden
+        className="pointer-events-none absolute -top-6 right-[-4%] select-none font-anton text-[22vw] leading-none text-white/[0.035] md:text-[9rem]"
+      >
+        TOOLS
+      </p>
+
+      <div className="relative mb-10 overflow-hidden border-y border-white/[0.06] py-3 md:mb-14">
+        <div className={`flex w-max gap-10 pr-10 ${reduce ? '' : 'marquee-track'}`}>
+          {ticker.map((item, i) => (
+            <span
+              key={`${item}-${i}`}
+              className="font-anton text-sm tracking-[0.18em] text-white/35 sm:text-base"
+            >
+              {item}
+              <span className="ml-10 text-[#fd2601]/70">✱</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       <div className="mx-auto max-w-[68rem] px-5 md:px-10 lg:px-12">
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -62,10 +85,10 @@ export function StickyReveal() {
           {steps.map((step, i) => (
             <motion.li
               key={step.title}
-              initial={reduce ? false : { opacity: 0, y: 18 }}
+              initial={reduce ? false : { opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-30px' }}
-              transition={{ duration: 0.4, delay: reduce ? 0 : i * 0.05 }}
+              transition={{ duration: 0.5, delay: reduce ? 0 : i * 0.08, ease: [0.22, 1, 0.36, 1] }}
               className="min-w-0"
             >
               <a
@@ -76,15 +99,21 @@ export function StickyReveal() {
                   document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
                 }}
               >
-                <div className="overflow-hidden rounded-[1rem] border border-white/10 bg-[#1a0d09]">
+                <div className="relative overflow-hidden rounded-[1rem] bg-[#1a0d09] ring-1 ring-white/10">
                   <img
                     src={step.thumb}
                     alt=""
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                   />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#140a07]/55 to-transparent opacity-80" />
+                  <span className="shine-sweep pointer-events-none absolute inset-0" />
+                  <span className="absolute left-3 top-3 font-anton text-sm tracking-[0.14em] text-white/90">
+                    {step.kicker}
+                  </span>
                 </div>
-                <p className="mt-4 font-anton text-sm tracking-[0.16em] text-[#fd2601]">{step.kicker}</p>
-                <h3 className="mt-2 font-display text-xl font-semibold tracking-[-0.03em] text-[#fff6ef]">
+                <h3 className="mt-4 font-display text-xl font-semibold tracking-[-0.03em] text-[#fff6ef] transition-colors group-hover:text-white">
                   {step.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#d7c2b4]">{step.body}</p>

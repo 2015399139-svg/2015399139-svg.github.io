@@ -41,14 +41,14 @@ export function ClickSpark({ children }: { children: ReactNode }) {
         ctx.lineTo(s.x + Math.cos(s.angle) * dist, s.y + Math.sin(s.angle) * dist)
         ctx.stroke()
       }
-      raf = requestAnimationFrame(draw)
+      if (sparks.current.length) raf = requestAnimationFrame(draw)
+      else raf = 0
     }
-    raf = requestAnimationFrame(draw)
 
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null
       if (target?.closest('[role="dialog"]')) return
-      const count = 10
+      const count = 8
       for (let i = 0; i < count; i++) {
         sparks.current.push({
           x: e.clientX,
@@ -57,6 +57,7 @@ export function ClickSpark({ children }: { children: ReactNode }) {
           born: performance.now(),
         })
       }
+      if (!raf) raf = requestAnimationFrame(draw)
     }
     window.addEventListener('click', onClick)
     return () => {

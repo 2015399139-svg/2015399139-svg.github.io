@@ -3,6 +3,8 @@ export const profile = {
   tagline: '全栈开发 · 动效与界面设计',
   bio: '我专注于把复杂的想法做成顺滑、可感知的数字体验。这里是我精选的项目与实验性动效展示。',
   email: '201539913@qq.com',
+  wechatName: '生活在树上',
+  resumeFileName: '朱成斌-简历.pdf',
   tools: ['Cinema 4D', 'Blender', 'After Effects', 'Premiere', 'Photoshop', 'Figma'] as const,
   skills: ['3D 渲染', '动效设计', '品牌视觉', '产品设计', '插画'] as const,
   links: [] as { label: string; href: string }[],
@@ -44,10 +46,10 @@ export type PortfolioProject = {
 
 /** Maine Coon 品牌专题 · 图 */
 export const maineCoonImages = {
-  hero: publicAsset('images/projects/maine-coon/hero-key-visual.png'),
-  collection: publicAsset('images/projects/maine-coon/collection-packaging.png'),
-  app: publicAsset('images/projects/maine-coon/mobile-app-ui.png'),
-  icon: publicAsset('images/projects/maine-coon/icon-guidelines.png'),
-  food: publicAsset('images/projects/maine-coon/packaging-cat-food.png'),
-  store: publicAsset('images/projects/maine-coon/storefront-space.png'),
+  hero: publicAsset('images/projects/maine-coon/hero-key-visual.jpg'),
+  collection: publicAsset('images/projects/maine-coon/collection-packaging.jpg'),
+  app: publicAsset('images/projects/maine-coon/mobile-app-ui.jpg'),
+  icon: publicAsset('images/projects/maine-coon/icon-guidelines.jpg'),
+  food: publicAsset('images/projects/maine-coon/packaging-cat-food.jpg'),
+  store: publicAsset('images/projects/maine-coon/storefront-space.jpg'),
 }

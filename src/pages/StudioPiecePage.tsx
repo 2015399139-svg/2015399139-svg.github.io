@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { ShowcaseFilm } from '../components/bits/ShowcaseFilm'
 import type { StudioFrame, StudioPiece } from '../data/studio'
 
 function Frame({ frame, kicker }: { frame: StudioFrame; kicker: string }) {
@@ -81,7 +82,18 @@ export function StudioPiecePage({
           ))}
         </dl>
 
-        {piece.filmOnly ? (
+        {piece.film ? (
+          <div className="mt-12">
+            <ShowcaseFilm
+              src={piece.film.src}
+              poster={piece.film.poster}
+              kicker={piece.film.kicker}
+              title={piece.film.title}
+              body={piece.film.body}
+              autoPlay
+            />
+          </div>
+        ) : piece.filmOnly ? (
           <div className="mt-12">
             {(piece.outcome ?? []).map((plate) => (
               <Frame key={plate.src} frame={plate} kicker={piece.outcomeKicker ?? '成片'} />

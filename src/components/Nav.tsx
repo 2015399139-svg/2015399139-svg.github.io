@@ -1,6 +1,9 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { profile, publicAsset } from '../data/profile'
+
+const resumeHref = publicAsset('resume.pdf')
 
 const links = [
   { id: 'work', label: '作品' },
@@ -65,7 +68,7 @@ export function Nav() {
         <nav aria-label="主导航" className="flex items-center justify-between gap-2 text-white sm:gap-4">
           <Link
             to="/"
-            className="min-w-0 shrink truncate font-sans text-[10px] font-medium uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.34em]"
+            className="min-w-0 shrink truncate font-sans text-[10px] font-medium uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.38em]"
             onClick={closeMenu}
           >
             ✱ Zhuchengbin
@@ -76,7 +79,7 @@ export function Nav() {
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
-                  className="text-[12px] font-medium uppercase tracking-[0.22em] transition-opacity hover:opacity-80"
+                  className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/90 transition-opacity hover:text-white"
                 >
                   {l.label}
                 </a>
@@ -147,6 +150,16 @@ export function Nav() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href={resumeHref}
+                  download={profile.resumeFileName}
+                  className="block rounded-xl px-4 py-3.5 text-base font-semibold tracking-wide [-webkit-tap-highlight-color:transparent]"
+                  onClick={closeMenu}
+                >
+                  下载简历
+                </a>
+              </li>
             </motion.ul>
           ) : null}
         </AnimatePresence>

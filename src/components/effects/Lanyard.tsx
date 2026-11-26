@@ -59,11 +59,12 @@ export function Lanyard({
   leanYRef.current = leanY
 
   const [flipped, setFlipped] = useState(false)
-  const [hint, setHint] = useState(true)
   const flippedRef = useRef(false)
   const flip = useSpring(0, { stiffness: 140, damping: 16 })
   const drag = useRef({ on: false, ox: 0, oy: 0, moved: false, t: 0, gx: 0, gy: 0 })
   const releaseRef = useRef<(x: number, y: number) => void>(() => {})
+  const loopRef = useRef(0)
+  const kickLoop = useRef(() => {})
 
   function toggleFlip() {
     const next = !flippedRef.current
@@ -130,7 +131,6 @@ export function Lanyard({
     if (!flicked) {
       body.current.omega = 0
       body.current.radial = 0
-      setHint(false)
       toggleFlip()
     }
   }
@@ -172,25 +172,53 @@ export function Lanyard({
     const born = performance.now()
     body.current = { theta: 0.32, omega: 0.35, radius: rest * 0.96, radial: 0 }
     place(0.32, rest * 0.96)
-    const hintTimer = window.setTimeout(() => setHint(false), 4200)
-    let raf = 0
     let last = born
+    let visible = true
     const tick = (now: number) => {
+      if (document.hidden || !visible) {
+        last = now
+        loopRef.current = requestAnimationFrame(tick)
+        return
+      }
       const dt = Math.min(0.032, (now - last) / 1000)
       last = now
-      if (!drag.current.on && now - born > 120) {
-        const sub = 4
-        const h = dt / sub
-        for (let i = 0; i < sub; i++) step(h)
-      } else if (!drag.current.on) {
-        place(body.current.theta, body.current.radius)
+      const b = body.current
+      const settled =
+        !drag.current.on &&
+        now - born > 900 &&
+        Math.abs(b.omega) < 0.012 &&
+        Math.abs(b.radial) < 4 &&
+        Math.abs(b.theta) < 0.02 &&
+        Math.abs(b.radius - restRef.current) < 1.2
+      if (!drag.current.on && now - born > 120 && !settled) {
+        const h = dt / 2
+        step(h)
+        step(h)
+        loopRef.current = requestAnimationFrame(tick)
+        return
       }
-      raf = requestAnimationFrame(tick)
+      place(body.current.theta, body.current.radius)
+      if (settled) {
+        loopRef.current = 0
+        return
+      }
+      loopRef.current = requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
+    kickLoop.current = () => {
+      if (loopRef.current) return
+      last = performance.now()
+      loopRef.current = requestAnimationFrame(tick)
+    }
+    kickLoop.current()
+    const io = new IntersectionObserver(([entry]) => {
+      visible = !!entry?.isIntersecting
+      if (visible) kickLoop.current()
+    })
+    if (rootRef.current) io.observe(rootRef.current)
     return () => {
-      cancelAnimationFrame(raf)
-      window.clearTimeout(hintTimer)
+      cancelAnimationFrame(loopRef.current)
+      loopRef.current = 0
+      io.disconnect()
     }
   }, [reduce, ropeLen, ropeRot])
 
@@ -214,6 +242,7 @@ export function Lanyard({
     }
     body.current.omega = 0
     body.current.radial = 0
+    kickLoop.current()
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
     } catch {
@@ -252,11 +281,6 @@ export function Lanyard({
         </span>
         <span className="absolute left-1/2 top-[7px] z-10 size-[15px] -translate-x-1/2 rounded-full border-[2.5px] border-[#fff6ef] bg-[radial-gradient(circle_at_50%_38%,rgba(255,246,239,0.22),rgba(253,38,1,0.12)_55%,transparent_72%)] shadow-[0_2px_4px_rgba(60,10,0,0.28),inset_0_1px_0_rgba(255,255,255,0.4)] sm:top-[8px] sm:size-[17px] sm:border-[3px]" />
       </div>
-      {hint && !flipped && !reduce ? (
-        <p className="pointer-events-none absolute bottom-1 left-1/2 z-40 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.12em] text-white/70 sm:bottom-2 sm:text-[11px] sm:tracking-[0.14em]">
-          点按翻面 · 看工具
-        </p>
-      ) : null}
       <motion.div
         className="absolute left-1/2 top-[15px] z-20 sm:top-[16px]"
         style={{ width: 0, height: 0, rotate: ropeRot, transformOrigin: '0px 0px' }}

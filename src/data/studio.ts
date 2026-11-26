@@ -26,6 +26,13 @@ export type StudioPiece = {
   coverVideo?: string
   /** 专题页只放成片，跳过灵感与过程。 */
   filmOnly?: boolean
+  film?: {
+    src: string
+    poster?: string
+    title: string
+    body: string
+    kicker?: string
+  }
   inspiration?: StudioFrame
   process?: StudioFrame[]
   outcome?: StudioFrame[]
@@ -42,6 +49,8 @@ const img = (file: string) => {
   const stamp = q === -1 ? '' : file.slice(q)
   return `${publicAsset(`images/projects/studio/${name}`)}${stamp}`
 }
+
+const vid = (file: string) => publicAsset(`video/${file}`)
 
 export const studioPieces: StudioPiece[] = [
   {
@@ -101,44 +110,18 @@ export const studioPieces: StudioPiece[] = [
     accent: 'from-[#1a1208]/80 to-[#e6b325]/35',
     year: '2026',
     role: '产品与界面',
-    medium: '2D / 3D 导图',
-    summary: '源图把笔记和导图放在一处。先按条写下，再连成彩色的枝；要看全局时，同一张图收到三维球面上。',
+    medium: '2D / 3D 导图 · 演示视频',
+    summary: '源图把笔记和导图放在一处。先按条写下，再连成彩色的枝；要看全局时，同一张图收到三维球面上。下方成片按原比例完整播放。',
     cover: img('yuantu-cover.jpg?v=3'),
     coverSet: [img('yuantu-notes.jpg?v=2'), img('yuantu-board.jpg?v=2'), img('yuantu-sphere.jpg?v=2')],
-    inspiration: {
-      src: img('yuantu-notes.jpg?v=2'),
-      title: '先按条写下来',
-      body: '十二个主题排在大纲里。市场分析、技术架构、用户体验各占一行，颜色已经标好，还没有连线。',
+    filmOnly: true,
+    film: {
+      src: `${vid('yuantu-demo.mp4')}?v=4`,
+      poster: img('yuantu-cover.jpg?v=3'),
+      kicker: '成片演示',
+      title: '从大纲到球面的一次完整走查',
+      body: '同一份想法：大纲、平面导图、节点属性和搜索，再到球面总览。进入专题后自动播放，界面完整入画。',
     },
-    process: [
-      {
-        src: img('yuantu-board.jpg?v=2'),
-        title: '摊成一张导图',
-        body: '同一份大纲走到画面中央。枝按颜色分开，线上写着调研、支撑、视觉。左侧笔记还在，改一条，图跟着动。',
-      },
-      {
-        src: img('yuantu-inspector.jpg?v=2'),
-        title: '颜色、权重和线长',
-        body: '选中节点就能改。权重决定它有多显眼，线长决定它离中心多远。图片、视频和文件可以挂在节点上。',
-      },
-      {
-        src: img('yuantu-search.jpg?v=2'),
-        title: '在图里找一句',
-        body: '搜「市场」，市场分析和市场运营同时亮起来。没被搜到的枝退到后面。',
-      },
-    ],
-    outcome: [
-      {
-        src: img('yuantu-light.jpg?v=2'),
-        title: '换到白天',
-        body: '深色和浅色是同一张图。节点、连线和笔记都还在，只是纸色换了。',
-      },
-      {
-        src: img('yuantu-sphere.jpg?v=2'),
-        title: '收到球面上',
-        body: '平面上的枝转到三维。中心还是同一个主题，节点贴在网面上，可以转着看。',
-      },
-    ],
   },
   {
     slug: 'maine-coon-brand',

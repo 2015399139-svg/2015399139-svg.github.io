@@ -11,11 +11,13 @@ export function PointerGlow() {
 
   useEffect(() => {
     if (reduce) return
+    if (window.matchMedia('(pointer: coarse)').matches) return
     const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return
       x.set(e.clientX)
       y.set(e.clientY)
     }
-    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointermove', onMove, { passive: true })
     return () => window.removeEventListener('pointermove', onMove)
   }, [reduce, x, y])
 
