@@ -1,0 +1,15 @@
+# Netlify：https://www.netlify.com/ 连接 Git 仓库后会自动读取本文件。
+# SPA 回退：见 public/_redirects（构建时拷入 dist，Git 与拖拽 dist 均生效）。
+# 子路径部署时在 Netlify → Environment variables 设置 VITE_BASE_PATH（与 vite.config.ts 一致）。
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

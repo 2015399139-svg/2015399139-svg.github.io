@@ -1,0 +1,306 @@
+@import 'tailwindcss';
+
+/**
+ * 全站统一色轴：深暖底 + 橙红高光，与首页首屏同一套。
+ * `--page-rgb` 用于区块衔接渐变，避免各组件手写不一致。
+ */
+:root {
+  --page-rgb: 20 10 7;
+  --page-deep-rgb: 10 4 2;
+  --accent-teal-rgb: 253 38 1;
+  --accent-cyan-rgb: 243 126 28;
+  --accent-indigo-rgb: 168 58 18;
+}
+
+@theme {
+  --font-display: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', system-ui, sans-serif;
+  --font-sans: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', system-ui, sans-serif;
+  --color-surface: #140a07;
+  --color-surface-elevated: #1e110c;
+  --color-surface-soft: #100705;
+  --color-border-subtle: rgba(253, 38, 1, 0.16);
+  --color-text-muted: #d7c2b4;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: var(--font-sans);
+  background: #140a07;
+  color: #fff6ef;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+html.mc-brand-case body,
+html.mono-ape-nebula body,
+html.tech-3d-portfolio body {
+  background: #140a07;
+  color: #fff6ef;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-anton {
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.hero-display-word {
+  display: block;
+  width: 100%;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
+  font-size: clamp(1.85rem, 5.6vw, 4.85rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fffaf6;
+  font-kerning: normal;
+  font-feature-settings: 'kern' 1, 'liga' 0;
+  text-shadow: 0 1px 0 rgba(90, 22, 0, 0.22);
+}
+
+.hero-stage,
+.hero-nav {
+  font-family: var(--font-sans);
+}
+
+.hero-stage ::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+.shiny-text {
+  background-image: linear-gradient(
+    110deg,
+    #fff6ef 0%,
+    #fff6ef 38%,
+    #ffffff 48%,
+    #ffd7c2 54%,
+    #fff6ef 70%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shiny-sweep 3.6s linear infinite;
+}
+
+.shiny-text-still {
+  animation: none;
+  background-position: 40% 0;
+}
+
+@keyframes shiny-sweep {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* 首页接在橙色首屏之后：同一暖色轴，只是把饱和度收进深暖底，避免青冷色跳切。 */
+.home-canvas {
+  --page-rgb: 20 10 7;
+  --page-deep-rgb: 10 4 2;
+  --accent-teal-rgb: 253 38 1;
+  --accent-cyan-rgb: 243 126 28;
+  --accent-indigo-rgb: 168 58 18;
+  --color-surface: #140a07;
+  --color-surface-elevated: #1e110c;
+  --color-surface-soft: #100705;
+  --color-text-muted: #d7c2b4;
+  color: #fff6ef;
+  font-family: var(--font-sans);
+  background: #140a07;
+}
+
+.home-canvas ::selection {
+  background: #ffffff;
+  color: #fd2601;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+.shine-sweep {
+  background-image: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 246, 239, 0.22) 50%,
+    transparent 60%
+  );
+  background-size: 220% 100%;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.group:hover .shine-sweep {
+  opacity: 1;
+  animation: shiny-sweep 1.1s ease-out;
+}
+
+.work-orbit {
+  --orbit-r: 11.5rem;
+  perspective: 1200px;
+  perspective-origin: 50% 46%;
+}
+
+.work-orbit-ring {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-orbit-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(42vw, 13.5rem);
+  margin-left: calc(min(42vw, 13.5rem) / -2);
+  margin-top: -10.2rem;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  cursor: grab;
+}
+
+.work-orbit-item:active {
+  cursor: grabbing;
+}
+
+.work-orbit-card {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  background: #1a0d09;
+  box-shadow:
+    0 28px 50px -24px rgba(20, 6, 2, 0.8),
+    0 0 0 1px rgba(255, 246, 239, 0.1);
+  transform: rotateZ(-7deg);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s ease;
+}
+
+.work-orbit-item-on .work-orbit-card {
+  transform: rotateZ(-11deg) scale(1.08);
+  box-shadow:
+    0 36px 64px -20px rgba(253, 38, 1, 0.35),
+    0 0 0 1px rgba(255, 246, 239, 0.18);
+}
+
+.work-orbit-card img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.work-orbit-meta {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 2.4rem 0.85rem 0.85rem;
+  background: linear-gradient(to top, rgba(10, 4, 2, 0.82), transparent);
+  color: #fff6ef;
+}
+
+.work-orbit-meta span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: #ffb089;
+}
+
+.work-orbit-meta strong {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+@media (min-width: 768px) {
+  .work-orbit {
+    --orbit-r: 16.5rem;
+  }
+  .work-orbit-item {
+    width: 15.5rem;
+    margin-left: -7.75rem;
+    margin-top: -11.6rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .work-orbit {
+    --orbit-r: 19rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-display-word {
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .shine-sweep,
+  .animate-shimmer {
+    animation: none;
+  }
+  .work-orbit-ring {
+    transition: none;
+  }
+}

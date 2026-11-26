@@ -1,0 +1,17 @@
+{
+  "name": "作品集 · Portfolio",
+  "short_name": "Portfolio",
+  "description": "个人作品集 — 交互、动效与创意开发",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#140a07",
+  "theme_color": "#140a07",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}
