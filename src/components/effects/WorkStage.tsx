@@ -77,12 +77,12 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
     return () => window.removeEventListener('wheel', onWheel)
   }, [go, reduce])
 
-  function onDown(e: ReactPointerEvent<HTMLDivElement>) {
+  function onDown(e: ReactPointerEvent<HTMLElement>) {
     if (e.pointerType === 'mouse' && e.button !== 0) return
     drag.current = { on: true, x: e.clientX, acc: 0, moved: false }
   }
 
-  function onMove(e: ReactPointerEvent<HTMLDivElement>) {
+  function onMove(e: ReactPointerEvent<HTMLElement>) {
     if (!drag.current.on) return
     drag.current.acc += e.clientX - drag.current.x
     drag.current.x = e.clientX
