@@ -72,7 +72,7 @@ export function Projects() {
   )
 
   return (
-    <section id="work" className="relative z-[2] bg-[#140a07]">
+    <section id="work" className="relative z-[2] scroll-mt-28 bg-[#140a07]">
       {typeof document !== 'undefined' ? createPortal(modalLayer, document.body) : null}
       <WorkStage onOpen={setModalProject} />
     </section>
