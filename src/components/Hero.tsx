@@ -70,7 +70,7 @@ export function Hero() {
           <div className="relative z-10 w-full">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} />
           </div>
-          <div className="relative z-20 -mt-3 w-full sm:-mt-6 lg:-mt-8">
+          <div className="relative z-20 mt-1 w-full sm:-mt-7 lg:-mt-8">
             <motion.p
               aria-hidden
               className="hero-display-word"
