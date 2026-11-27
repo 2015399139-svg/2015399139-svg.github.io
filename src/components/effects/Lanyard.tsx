@@ -272,7 +272,7 @@ export function Lanyard({
     'repeating-linear-gradient(90deg, #5c1608 0 2px, #fd2601 2px 5px, #ffd7c2 5px 7px, #e23b12 7px 11px, #7a1a08 11px 14px)'
 
   return (
-    <div ref={rootRef} className="relative mx-auto h-[340px] w-full sm:h-[530px] lg:h-[600px]">
+    <div ref={rootRef} className="relative mx-auto h-[320px] w-full sm:h-[500px] lg:h-[545px]">
       {/* 固定挂点：钉头 + 开口环，织带从环中穿过下垂 */}
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 z-40 -translate-x-1/2">
         <span className="absolute left-1/2 top-0 size-5 -translate-x-1/2 rounded-full bg-white/22 blur-[1.5px] sm:size-6" />
