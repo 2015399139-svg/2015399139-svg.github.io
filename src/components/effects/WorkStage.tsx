@@ -139,13 +139,18 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
               {pieces.map((item, i) => {
                 const on = i === active
                 const src = face(item)
+                const turn = Math.abs(((i - active) * step) % 360)
+                const yaw = Math.min(turn, 360 - turn)
+                const far = yaw > 95
                 return (
                   <button
                     key={item.slug}
                     type="button"
                     aria-current={on ? 'true' : undefined}
                     aria-label={`${item.title}，查看专题`}
-                    className={`work-orbit-item pointer-events-auto ${on ? 'work-orbit-item-on' : ''}`}
+                    aria-hidden={far || undefined}
+                    tabIndex={far ? -1 : 0}
+                    className={`work-orbit-item pointer-events-auto ${on ? 'work-orbit-item-on' : ''} ${far ? 'work-orbit-item-far' : ''}`}
                     style={{ transform: `rotateY(${i * step}deg) translateZ(var(--orbit-r))` }}
                     onPointerDown={onDown}
                     onPointerMove={onMove}

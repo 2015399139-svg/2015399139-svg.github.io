@@ -241,10 +241,15 @@ html.tech-3d-portfolio body {
   width: min(42vw, 13.5rem);
   margin-left: calc(min(42vw, 13.5rem) / -2);
   margin-top: -10.2rem;
-  transform-style: preserve-3d;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   cursor: grab;
+}
+
+.work-orbit-item-far {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .work-orbit-item:active {
@@ -255,6 +260,8 @@ html.tech-3d-portfolio body {
   position: relative;
   display: block;
   overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   aspect-ratio: 3 / 4;
   border-radius: 1rem;
   background: #1a0d09;
