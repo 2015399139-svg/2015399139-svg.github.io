@@ -152,10 +152,10 @@ export function Hero() {
       >
         <motion.div
           style={{ x: titleX }}
-          className="relative grid w-full max-w-6xl grid-cols-1 items-end lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-x-2"
+          className="relative grid w-full max-w-6xl grid-cols-1 items-center lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-x-3"
         >
           <h1 className="sr-only">Personal Portfolio</h1>
-          <div className="pointer-events-none order-2 mt-1 lg:order-1 lg:mb-10 lg:mt-0">
+          <div className="pointer-events-none order-2 mt-2 lg:order-1 lg:mt-24">
             <SwingWord
               word="PERSONAL"
               follow={follow}
@@ -168,7 +168,7 @@ export function Hero() {
           <div className="order-1 w-full lg:order-2 lg:w-[min(100%,280px)]">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
           </div>
-          <div className="pointer-events-none order-3 mt-1 lg:order-3 lg:mb-10 lg:mt-0">
+          <div className="pointer-events-none order-3 mt-1 lg:order-3 lg:mt-24">
             <SwingWord
               word="PORTFOLIO"
               follow={follow}
