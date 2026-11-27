@@ -80,7 +80,7 @@ html.tech-3d-portfolio body {
 .hero-swing-letter {
   display: inline-block;
   font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
-  font-size: clamp(1.35rem, 3.4vw, 2.55rem);
+  font-size: clamp(1.55rem, 4.2vw, 3.1rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1;
