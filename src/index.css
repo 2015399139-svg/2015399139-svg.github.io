@@ -69,20 +69,25 @@ html.tech-3d-portfolio body {
   letter-spacing: 0.04em;
 }
 
-.hero-display-word {
-  display: block;
-  width: 100%;
+.hero-swing-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.06em;
+  margin: 0;
+  min-height: 1.1em;
+}
+
+.hero-swing-letter {
+  display: inline-block;
   font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
-  font-size: clamp(1.65rem, 4.8vw, 3.85rem);
+  font-size: clamp(1.35rem, 3.4vw, 2.55rem);
   font-weight: 600;
-  letter-spacing: 0.16em;
-  line-height: 0.95;
-  text-align: center;
+  letter-spacing: 0.02em;
+  line-height: 1;
   text-transform: uppercase;
   color: #fffaf6;
-  font-kerning: normal;
-  font-feature-settings: 'kern' 1, 'liga' 0;
   text-shadow: 0 1px 0 rgba(90, 22, 0, 0.22);
+  will-change: transform;
 }
 
 .hero-stage,
@@ -289,8 +294,8 @@ html.tech-3d-portfolio body {
 }
 
 @media (max-width: 639px) {
-  .hero-display-word {
-    letter-spacing: 0.12em;
+  .hero-swing-letter {
+    font-size: clamp(1.2rem, 6.2vw, 1.7rem);
   }
 }
 

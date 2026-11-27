@@ -5,6 +5,7 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  type MotionValue,
 } from 'framer-motion'
 import { useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { Lanyard } from './effects/Lanyard'
@@ -13,12 +14,96 @@ import { profile, publicAsset } from '../data/profile'
 const portraitSrc = publicAsset('images/hero-portrait.jpg')
 const ease = [0.22, 1, 0.36, 1] as const
 
+function SwingLetter({
+  ch,
+  i,
+  mid,
+  follow,
+  stretch,
+  reduce,
+  delay,
+}: {
+  ch: string
+  i: number
+  mid: number
+  follow: MotionValue<number>
+  stretch: MotionValue<number>
+  reduce: boolean | null
+  delay: number
+}) {
+  const dist = i - mid
+  const x = useTransform([follow, stretch], ([deg, t]) => {
+    const rad = (Number(deg) * Math.PI) / 180
+    return Math.sin(rad) * 11 * dist * Number(t)
+  })
+  const y = useTransform([follow, stretch], ([deg, t]) => {
+    const rad = (Number(deg) * Math.PI) / 180
+    return (1 - Math.cos(rad)) * (8 + Math.abs(dist) * 1.6) + (Number(t) - 1) * 26
+  })
+  const rotate = useTransform(follow, (deg) => Number(deg) * 0.38)
+
+  return (
+    <motion.span
+      className="hero-swing-letter"
+      initial={reduce ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : delay, ease }}
+      style={reduce ? undefined : { x, y, rotate }}
+    >
+      {ch}
+    </motion.span>
+  )
+}
+
+function SwingWord({
+  word,
+  follow,
+  stretch,
+  reduce,
+  delay,
+  align,
+}: {
+  word: string
+  follow: MotionValue<number>
+  stretch: MotionValue<number>
+  reduce: boolean | null
+  delay: number
+  align: 'start' | 'center' | 'end'
+}) {
+  const chars = Array.from(word)
+  const mid = (chars.length - 1) / 2
+  return (
+    <p
+      aria-hidden
+      className={`hero-swing-row ${
+        align === 'end' ? 'lg:justify-end' : align === 'start' ? 'lg:justify-start' : 'justify-center'
+      }`}
+    >
+      {chars.map((ch, i) => (
+        <SwingLetter
+          key={`${word}-${i}`}
+          ch={ch}
+          i={i}
+          mid={mid}
+          follow={follow}
+          stretch={stretch}
+          reduce={reduce}
+          delay={delay + i * 0.035}
+        />
+      ))}
+    </p>
+  )
+}
+
 export function Hero() {
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const sx = useSpring(mx, { stiffness: 42, damping: 18, mass: 0.6 })
+  const swingDeg = useMotionValue(0)
+  const stretch = useMotionValue(1)
+  const follow = useSpring(swingDeg, { stiffness: 62, damping: 13, mass: 0.55 })
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -65,30 +150,33 @@ export function Hero() {
         className="relative z-20 mt-14 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-16 sm:px-4"
         style={{ y: leaveY, opacity: leaveOpacity, scale: leaveScale }}
       >
-        <motion.div style={{ x: titleX }} className="relative flex w-full flex-col items-center">
+        <motion.div
+          style={{ x: titleX }}
+          className="relative grid w-full max-w-6xl grid-cols-1 items-end lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-x-2"
+        >
           <h1 className="sr-only">Personal Portfolio</h1>
-          <div className="relative z-10 w-full">
-            <Lanyard src={portraitSrc} leanX={mx} leanY={my} />
+          <div className="pointer-events-none order-2 mt-1 lg:order-1 lg:mb-10 lg:mt-0">
+            <SwingWord
+              word="PERSONAL"
+              follow={follow}
+              stretch={stretch}
+              reduce={reduce}
+              delay={0.1}
+              align="end"
+            />
           </div>
-          <div className="relative z-20 mt-1 w-full sm:-mt-7 lg:-mt-8">
-            <motion.p
-              aria-hidden
-              className="hero-display-word"
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.08, ease }}
-            >
-              Personal
-            </motion.p>
-            <motion.p
-              aria-hidden
-              className="hero-display-word mt-[0.12em]"
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.16, ease }}
-            >
-              Portfolio
-            </motion.p>
+          <div className="order-1 w-full lg:order-2 lg:w-[min(100%,280px)]">
+            <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
+          </div>
+          <div className="pointer-events-none order-3 mt-1 lg:order-3 lg:mb-10 lg:mt-0">
+            <SwingWord
+              word="PORTFOLIO"
+              follow={follow}
+              stretch={stretch}
+              reduce={reduce}
+              delay={0.18}
+              align="start"
+            />
           </div>
         </motion.div>
       </motion.div>
