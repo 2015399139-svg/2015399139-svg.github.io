@@ -73,10 +73,10 @@ html.tech-3d-portfolio body {
   display: block;
   width: 100%;
   font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
-  font-size: clamp(1.85rem, 5.6vw, 4.85rem);
+  font-size: clamp(1.65rem, 4.8vw, 3.85rem);
   font-weight: 600;
   letter-spacing: 0.16em;
-  line-height: 1;
+  line-height: 0.95;
   text-align: center;
   text-transform: uppercase;
   color: #fffaf6;
