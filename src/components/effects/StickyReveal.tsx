@@ -1,127 +1,114 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { profile, publicAsset } from '../../data/profile'
+import { profile } from '../../data/profile'
 
-const steps = [
+const toolkit = [
   {
-    kicker: '01',
-    title: '渲染质感',
-    body: '同一网格换材质。白瓷、玻璃和金属留在同一套暖光里。',
-    tools: 'Cinema 4D · Blender',
-    thumb: publicAsset('images/projects/studio/cup-ceramic.jpg'),
+    tool: 'Cinema 4D',
+    craft: '建模与材质',
+    note: '产品与场景的体量、光影先在这里立住。',
   },
   {
-    kicker: '02',
-    title: '软件结构',
-    body: '想法先写成大纲，再铺成导图，必要时收到球面上总览。',
-    tools: 'Figma · 产品设计',
-    thumb: publicAsset('images/projects/studio/yuantu-cover.jpg'),
+    tool: 'Blender',
+    craft: '场景与预览',
+    note: '复杂场景落地，也能直接挂进网页里转。',
   },
   {
-    kicker: '03',
-    title: '品牌系统',
-    body: '标志、包装、应用和门店共用一条影像与线型语言。',
-    tools: 'Photoshop · 品牌系统',
-    thumb: publicAsset('images/projects/studio/maine-cover.jpg'),
+    tool: 'After Effects',
+    craft: '动效节奏',
+    note: '时间轴上的呼吸感，把静态画面写成段落。',
   },
   {
-    kicker: '04',
-    title: '插画观察',
-    body: '城市里几处停一下的地方。墨色为主，一点橘红作语气。',
-    tools: '手绘 · 插画',
-    thumb: publicAsset('images/projects/studio/illu-bus.jpg'),
+    tool: 'Premiere',
+    craft: '剪辑叙事',
+    note: '片子的起承转合，音画对齐到一眼可读。',
+  },
+  {
+    tool: 'Photoshop',
+    craft: '影像与品牌',
+    note: '主视觉、包装与延展共用一套色与线。',
+  },
+  {
+    tool: 'Figma',
+    craft: '结构与界面',
+    note: '从大纲到球面导图，先把信息关系画清。',
   },
 ] as const
 
-const ticker = [...profile.tools, ...profile.skills, ...profile.tools, ...profile.skills]
-
-/** 能力 + 工具：橙英雄区落下后，用四件作品对齐叙事。 */
+/** 工具箱索引：纯排版，不和精选作品抢同一套缩略图。 */
 export function StickyReveal() {
   const reduce = useReducedMotion()
 
   return (
     <section
       id="motion"
-      className="relative scroll-mt-24 overflow-hidden bg-gradient-to-b from-[#2a120c] via-[#140a07] to-[#140a07] py-12 md:py-24"
+      className="relative scroll-mt-24 overflow-hidden bg-gradient-to-b from-[#2a120c] via-[#1a0c08] to-[#140a07] py-14 md:py-24"
     >
       <p
         aria-hidden
-        className="pointer-events-none absolute -top-6 right-[-4%] select-none font-anton text-[22vw] leading-none text-white/[0.035] md:text-[9rem]"
+        className="pointer-events-none absolute -top-4 left-[-2%] select-none font-anton text-[28vw] leading-none text-white/[0.03] md:left-auto md:right-[-3%] md:text-[11rem]"
       >
-        TOOLS
+        KIT
       </p>
 
-      <div className="relative mb-10 overflow-hidden border-y border-white/[0.06] py-3 md:mb-14">
-        <div className={`flex w-max gap-10 pr-10 ${reduce ? '' : 'marquee-track'}`}>
-          {ticker.map((item, i) => (
-            <span
-              key={`${item}-${i}`}
-              className="font-anton text-sm tracking-[0.18em] text-white/35 sm:text-base"
-            >
-              {item}
-              <span className="ml-10 text-[#fd2601]/70">✱</span>
-            </span>
-          ))}
-        </div>
-      </div>
+      <div className="relative mx-auto max-w-[68rem] px-5 md:px-10 lg:px-12">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)] lg:items-end lg:gap-16">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45 }}
+          >
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/55">// Toolkit</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em] text-[#fff6ef] md:text-3xl">
+              擅长工具
+            </h2>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#d7c2b4] md:text-[0.95rem]">
+              日常开着的软件箱。作品在下一节挂着，这里只谈手跟什么工具在一起。
+            </p>
+            <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
+              {profile.skills.map((skill) => (
+                <li
+                  key={skill}
+                  className="font-anton text-[0.7rem] tracking-[0.16em] text-[#ffb089]/85"
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
 
-      <div className="mx-auto max-w-[68rem] px-5 md:px-10 lg:px-12">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.45 }}
-          className="max-w-xl"
-        >
-          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/55">// Tools</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em] text-[#fff6ef] md:text-3xl">
-            擅长工具
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-[#d7c2b4] md:text-[0.95rem]">
-            和下面作品一一对应。软件跟手艺走，点进专题看完整过程。
-          </p>
-        </motion.div>
-
-        <ol className="mt-8 grid gap-8 sm:mt-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4 lg:gap-8">
-          {steps.map((step, i) => (
-            <motion.li
-              key={step.title}
-              initial={reduce ? false : { opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
-              transition={{ duration: 0.5, delay: reduce ? 0 : i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="min-w-0"
-            >
-              <a
-                href="#work"
-                className="group block outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ffb089]"
-                onClick={(e) => {
-                  e.preventDefault()
-                  document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+          <ol className="min-w-0 border-t border-white/[0.1]">
+            {toolkit.map((item, i) => (
+              <motion.li
+                key={item.tool}
+                initial={reduce ? false : { opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-24px' }}
+                transition={{
+                  duration: 0.45,
+                  delay: reduce ? 0 : i * 0.05,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
+                className="group grid grid-cols-[auto_1fr] gap-x-4 border-b border-white/[0.08] py-4 sm:grid-cols-[7.5rem_minmax(0,1fr)_minmax(0,1.35fr)] sm:items-baseline sm:gap-x-6 sm:py-5"
               >
-                <div className="relative overflow-hidden rounded-[1rem] bg-[#1a0d09] ring-1 ring-white/10">
-                  <img
-                    src={step.thumb}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                  />
-                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#140a07]/55 to-transparent opacity-80" />
-                  <span className="shine-sweep pointer-events-none absolute inset-0" />
-                  <span className="absolute left-3 top-3 font-anton text-sm tracking-[0.14em] text-white/90">
-                    {step.kicker}
-                  </span>
+                <span className="pt-1 font-anton text-[0.65rem] tracking-[0.2em] text-white/30 sm:pt-0">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className="min-w-0 sm:contents">
+                  <p className="font-anton text-[1.15rem] leading-none tracking-[0.04em] text-[#fff6ef] transition-colors group-hover:text-white sm:text-[1.35rem]">
+                    {item.tool}
+                  </p>
+                  <p className="mt-1.5 text-[11px] tracking-[0.12em] text-[#ffb089]/80 sm:mt-0 sm:justify-self-end sm:text-right">
+                    {item.craft}
+                  </p>
                 </div>
-                <h3 className="mt-4 font-display text-xl font-semibold tracking-[-0.03em] text-[#fff6ef] transition-colors group-hover:text-white">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#d7c2b4]">{step.body}</p>
-                <p className="mt-3 text-[11px] tracking-[0.08em] text-white/45">{step.tools}</p>
-              </a>
-            </motion.li>
-          ))}
-        </ol>
+                <p className="col-span-2 mt-2 text-sm leading-relaxed text-[#d7c2b4]/90 sm:col-span-3 sm:mt-2 sm:max-w-xl sm:pl-[calc(7.5rem+1.5rem)]">
+                  {item.note}
+                </p>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   )

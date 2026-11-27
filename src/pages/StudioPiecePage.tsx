@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { BlendViewer } from '../components/bits/BlendViewer'
 import { ShowcaseFilm } from '../components/bits/ShowcaseFilm'
 import type { StudioFrame, StudioPiece } from '../data/studio'
 
@@ -82,7 +83,16 @@ export function StudioPiecePage({
           ))}
         </dl>
 
-        {piece.film ? (
+        {piece.modelSrc ? (
+          <div className="mt-12">
+            <div className="aspect-[1024/354] w-full">
+              <BlendViewer src={piece.modelSrc} poster={piece.modelPoster} className="h-full w-full" />
+            </div>
+            <p className="mt-3 text-sm text-[#d7c2b4]">拖动旋转，滚轮或捏合拉近。</p>
+          </div>
+        ) : null}
+
+        {piece.modelSrc ? null : piece.film ? (
           <div className="mt-12">
             <ShowcaseFilm
               src={piece.film.src}

@@ -34,27 +34,31 @@ function SwingLetter({
   const dist = i - mid
   const x = useTransform([follow, stretch], ([deg, t]) => {
     const rad = (Number(deg) * Math.PI) / 180
-    return Math.sin(rad) * 22 * dist * Number(t)
+    return Math.sin(rad) * 16 * dist * Number(t)
   })
   const y = useTransform([follow, stretch], ([deg, t]) => {
     const rad = (Number(deg) * Math.PI) / 180
-    return (1 - Math.cos(rad)) * (14 + Math.abs(dist) * 3.2) + (Number(t) - 1) * 42
+    return (1 - Math.cos(rad)) * (10 + Math.abs(dist) * 2.4) + (Number(t) - 1) * 36
   })
-  const rotateZ = useTransform(follow, (deg) => Number(deg) * 0.55)
-  const rotateY = useTransform(follow, (deg) => Number(deg) * -0.9)
-  const skewX = useTransform(follow, (deg) => Number(deg) * -0.22)
+  const rotateZ = useTransform(follow, (deg) => Number(deg) * 0.42)
+  const rotateY = useTransform(follow, (deg) => Number(deg) * -0.7)
+  const skewX = useTransform(follow, (deg) => Number(deg) * -0.16)
   const scale = useTransform([follow, stretch], ([deg, t]) => {
-    const pulse = 1 + Math.abs(Number(deg)) * 0.004
-    return pulse * (0.96 + Math.min(0.12, Math.abs(Number(t) - 1) * 0.35))
+    const pulse = 1 + Math.abs(Number(deg)) * 0.003
+    return pulse * (0.97 + Math.min(0.1, Math.abs(Number(t) - 1) * 0.28))
   })
-  const z = useTransform(follow, (deg) => Math.cos((Number(deg) * Math.PI) / 180) * dist * -8)
+  const z = useTransform(follow, (deg) => Math.cos((Number(deg) * Math.PI) / 180) * dist * -6)
+
+  if (ch === ' ') {
+    return <span className="hero-swing-space" aria-hidden />
+  }
 
   return (
     <motion.span
       className="hero-swing-letter"
-      initial={reduce ? false : { opacity: 0, y: 22, filter: 'blur(8px)' }}
+      initial={reduce ? false : { opacity: 0, y: 28, filter: 'blur(10px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ duration: reduce ? 0 : 0.85, delay: reduce ? 0 : delay, ease }}
+      transition={{ duration: reduce ? 0 : 0.9, delay: reduce ? 0 : delay, ease }}
       style={reduce ? undefined : { x, y, z, rotateZ, rotateY, skewX, scale }}
     >
       {ch}
@@ -68,24 +72,17 @@ function SwingWord({
   stretch,
   reduce,
   delay,
-  align,
 }: {
   word: string
   follow: MotionValue<number>
   stretch: MotionValue<number>
   reduce: boolean | null
   delay: number
-  align: 'start' | 'center' | 'end'
 }) {
   const chars = Array.from(word)
   const mid = (chars.length - 1) / 2
   return (
-    <p
-      aria-hidden
-      className={`hero-swing-row ${
-        align === 'end' ? 'lg:justify-end' : align === 'start' ? 'lg:justify-start' : 'justify-center'
-      }`}
-    >
+    <p aria-hidden className="hero-swing-row justify-center">
       {chars.map((ch, i) => (
         <SwingLetter
           key={`${word}-${i}`}
@@ -95,7 +92,7 @@ function SwingWord({
           follow={follow}
           stretch={stretch}
           reduce={reduce}
-          delay={delay + i * 0.035}
+          delay={delay + i * 0.028}
         />
       ))}
     </p>
@@ -159,32 +156,28 @@ export function Hero() {
         className="relative z-20 mt-14 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-16 sm:px-4"
         style={{ y: leaveY, opacity: leaveOpacity, scale: leaveScale }}
       >
-        <motion.div style={{ x: titleX }} className="relative flex w-full max-w-5xl flex-col items-center">
+        <motion.div style={{ x: titleX }} className="relative flex w-full max-w-6xl flex-col items-center">
           <h1 className="sr-only">Personal Portfolio</h1>
-          <div className="relative w-full max-w-[34rem]">
-            <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
-            <div className="pointer-events-none relative z-20 -mt-10 sm:-mt-16 lg:-mt-[4.5rem] [perspective:900px]">
+          <div className="relative isolate w-full max-w-[46rem] pb-12 sm:pb-14 lg:pb-16">
+            {/* 单行大字在吊牌后方 */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-[-28%] top-[78%] z-0 sm:inset-x-[-32%] sm:top-[80%] lg:top-[81%] [perspective:1100px]"
+            >
               <motion.span
-                aria-hidden
-                className="absolute left-1/2 top-2 h-10 w-[min(88%,22rem)] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,246,239,0.45),rgba(253,38,1,0.2)_42%,transparent_72%)] blur-md"
+                className="absolute left-1/2 top-[42%] h-16 w-[min(96%,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,246,239,0.55),rgba(253,38,1,0.22)_40%,transparent_72%)] blur-lg"
                 style={{ x: ribbonX, skewX: ribbonSkew }}
               />
               <SwingWord
-                word="PERSONAL"
+                word="PERSONAL PORTFOLIO"
                 follow={follow}
                 stretch={stretch}
                 reduce={reduce}
                 delay={0.1}
-                align="center"
               />
-              <SwingWord
-                word="PORTFOLIO"
-                follow={follow}
-                stretch={stretch}
-                reduce={reduce}
-                delay={0.18}
-                align="center"
-              />
+            </div>
+            <div className="relative z-10">
+              <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
             </div>
           </div>
         </motion.div>
@@ -206,28 +199,28 @@ export function Hero() {
               {profile.bio}
             </p>
           </div>
-          <div className="flex max-w-xl flex-col gap-2 sm:items-end">
-            <p className="flex flex-wrap gap-1.5 sm:justify-end">
-              {profile.tools.map((tool) => (
-                <span
-                  key={tool}
-                  className="rounded-full border border-white/28 bg-white/[0.08] px-2.5 py-[5px] text-[10px] font-medium tracking-[0.06em] text-white/92"
-                >
-                  {tool}
-                </span>
-              ))}
-            </p>
-            <p className="flex flex-wrap gap-1.5 sm:justify-end">
-              {profile.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-full bg-black/12 px-2.5 py-[5px] text-[10px] tracking-[0.08em] text-white/78"
-                >
-                  {skill}
-                </span>
-              ))}
-            </p>
-          </div>
+          <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] tracking-[0.14em] text-white/78 sm:justify-end">
+            <a
+              href="#motion"
+              className="outline-offset-4 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/70"
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById('motion')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              工具箱 ↓
+            </a>
+            <a
+              href="#work"
+              className="outline-offset-4 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/70"
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              精选作品 ↓
+            </a>
+          </p>
         </motion.div>
       </div>
 

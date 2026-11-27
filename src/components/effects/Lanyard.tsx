@@ -317,11 +317,16 @@ export function Lanyard({
         onPointerUp={onUp}
         onPointerCancel={onUp}
       >
+          {/* 实心底板：盖住后方大字，避免透过工牌 */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-0 z-0 h-[210px] w-[146px] rounded-[1rem] bg-[#ff6a1f] sm:h-[314px] sm:w-[218px] sm:rounded-[1.15rem] lg:h-[362px] lg:w-[250px]"
+          />
           <motion.span
-            className="relative z-0 block h-[210px] w-[146px] [transform-style:preserve-3d] sm:h-[314px] sm:w-[218px] lg:h-[362px] lg:w-[250px]"
+            className="relative z-10 block h-[210px] w-[146px] [transform-style:preserve-3d] sm:h-[314px] sm:w-[218px] lg:h-[362px] lg:w-[250px]"
             style={{ rotateY: reduce ? (flipped ? 180 : 0) : flip, transformOrigin: 'center center' }}
           >
-            <span className="absolute inset-0 flex flex-col overflow-hidden rounded-[1rem] border-[2.5px] border-white/55 bg-white/35 shadow-[0_0_0_2px_rgba(253,38,1,0.18),0_28px_50px_-24px_rgba(60,10,0,0.55)] backdrop-blur-[3px] [backface-visibility:hidden] sm:rounded-[1.15rem] sm:border-[3px]">
+            <span className="absolute inset-0 flex flex-col overflow-hidden rounded-[1rem] border-[2.5px] border-white/70 bg-[#fff3e8] shadow-[0_0_0_2px_rgba(253,38,1,0.18),0_28px_50px_-24px_rgba(60,10,0,0.55)] [backface-visibility:hidden] sm:rounded-[1.15rem] sm:border-[3px]">
               <span className="h-[24px] shrink-0 sm:h-[34px] lg:h-[38px]" aria-hidden />
               <span
                 className="relative mx-[6px] mb-[6px] min-h-0 flex-1 overflow-hidden rounded-[0.55rem] bg-[#fd2601] sm:mx-2 sm:mb-2 sm:rounded-[0.8rem]"

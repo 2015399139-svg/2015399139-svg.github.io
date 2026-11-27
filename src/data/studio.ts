@@ -20,7 +20,7 @@ export type StudioPiece = {
   medium: string
   summary: string
   cover: string
-  /** 首页展片里并排对比的封面组（如三种材质）。 */
+  /** 首页展片里并排对比的封面组。 */
   coverSet?: string[]
   /** 首页展片里循环播放。静音。 */
   coverVideo?: string
@@ -40,6 +40,9 @@ export type StudioPiece = {
   processKicker?: string
   /** 完成区的小节名。缺省是「完成」。 */
   outcomeKicker?: string
+  /** 可在网页里旋转、拉近的 glTF / GLB。 */
+  modelSrc?: string
+  modelPoster?: string
 }
 
 /** 支持 `file.jpg?v=2` 缓存戳；查询串不会写进文件路径。 */
@@ -54,50 +57,36 @@ const vid = (file: string) => publicAsset(`video/${file}`)
 
 export const studioPieces: StudioPiece[] = [
   {
-    slug: 'daily-cup',
-    title: '每日马克杯',
+    slug: 'water-garden',
+    title: '水岸庭院',
     discipline: '渲染',
-    desc: '家里每天用的一只杯子。同一套模型，外壳换成白瓷、磨砂玻璃和不锈钢。',
-    tags: ['统一建模', '杯子', '材质'],
-    accent: 'from-[#e7e1da]/50 to-[#8a8178]/25',
+    desc: '从 Blender 场景导出的可交互预览。拖动环顾，滚轮拉近。',
+    tags: ['Blender', '场景', '可交互'],
+    accent: 'from-[#7eb8d4]/40 to-[#fd2601]/20',
     year: '2026',
-    role: '造型、材质',
-    medium: '同一网格 · 三种材质',
-    summary: '马克杯只有一套模型。先握住高度和把手，灰模锁住轮廓，再只换材质：白瓷、磨砂玻璃、不锈钢。',
-    cover: img('cup-ceramic.jpg'),
-    coverSet: [img('cup-ceramic.jpg'), img('cup-glass.jpg'), img('cup-steel.jpg')],
+    role: '场景与预览',
+    medium: 'Blender · 实时预览',
+    summary: '江南水岸庭院。网页里直接转、拉、看结构。拖动手感来自同一份 Blend 文件。',
+    cover: img('blend-7277.jpg?v=3'),
+    modelSrc: `${publicAsset('models/blend-7277.glb')}?v=dark2`,
+    modelPoster: img('blend-7277.jpg?v=3'),
     inspiration: {
-      src: img('cup-ceramic.jpg'),
-      title: '先是一只能握住的杯子',
-      body: '直筒、一个把手、喝水的高度。不加图案，杯子先要能天天用。',
+      src: img('blend-7277.jpg?v=3'),
+      title: '先把院子摆进光里',
+      body: '亭、桥、水岸和白墙压在同一套天光下。网页预览保留机位，可自己走近。',
     },
     process: [
       {
-        src: img('cup-clay.jpg'),
-        title: '灰模先锁住外形',
-        body: '不指定材质。杯口、杯壁和把手的位置先对齐，后面三种材质都用这一套。',
-      },
-      {
-        src: img('cup-materials.svg'),
-        title: '网格不动，只换材料',
-        body: '白瓷、磨砂玻璃、不锈钢共用同一条杯口和同一只把手。',
+        src: img('blend-7277.jpg?v=3'),
+        title: '场景进浏览器',
+        body: 'Blend 不能直接上网页。导出 glTF，贴图压过，保留可转的结构。',
       },
     ],
     outcome: [
       {
-        src: img('cup-ceramic.jpg'),
-        title: '白瓷',
-        body: '早上喝水的那一只。表面有一点颗粒，光是软的。',
-      },
-      {
-        src: img('cup-glass.jpg'),
-        title: '磨砂玻璃',
-        body: '同一只杯子换成磨砂玻璃。能看见里面，把手还在原来的位置。',
-      },
-      {
-        src: img('cup-steel.jpg'),
-        title: '不锈钢',
-        body: '拉丝不锈钢。轮廓、机位和把手都与白瓷那一版对齐。',
+        src: img('blend-7277.jpg?v=3'),
+        title: '可交互成片',
+        body: '拖动旋转，滚轮拉近。工牌上是静帧，点开专题是同一座院子。',
       },
     ],
   },

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { SiteMark } from './brand/SiteMark'
 import { profile, publicAsset } from '../data/profile'
 
 const resumeHref = publicAsset('resume.pdf')
@@ -71,7 +72,7 @@ export function Nav() {
             className="inline-flex min-w-0 shrink items-center gap-2 truncate font-sans text-[10px] font-medium uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.38em]"
             onClick={closeMenu}
           >
-            <img src={publicAsset('favicon-64.png')} alt="" width={20} height={20} className="size-5 rounded-[6px] object-cover shadow-[0_0_0_1px_rgba(255,255,255,0.32)]" />
+            <SiteMark className="size-5 shrink-0 rounded-[6px] shadow-[0_0_0_1px_rgba(255,255,255,0.28)]" />
             Zhuchengbin
           </Link>
 
@@ -188,7 +189,7 @@ export function Nav() {
           className="inline-flex min-w-0 shrink items-center gap-2 font-display text-[0.95rem] font-semibold tracking-[-0.02em] text-white [-webkit-tap-highlight-color:transparent]"
           onClick={closeMenu}
         >
-          <img src={publicAsset('favicon-64.png')} alt="" width={20} height={20} className="size-5 rounded-[6px] object-cover shadow-[0_0_0_1px_rgba(255,255,255,0.24)]" />
+          <SiteMark className="size-5 shrink-0 rounded-[6px] shadow-[0_0_0_1px_rgba(255,255,255,0.22)]" />
           Portfolio
         </Link>
 
