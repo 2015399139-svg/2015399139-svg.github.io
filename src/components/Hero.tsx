@@ -150,33 +150,28 @@ export function Hero() {
         className="relative z-20 mt-14 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-16 sm:px-4"
         style={{ y: leaveY, opacity: leaveOpacity, scale: leaveScale }}
       >
-        <motion.div
-          style={{ x: titleX }}
-          className="relative grid w-full max-w-6xl grid-cols-1 items-center lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-x-3"
-        >
+        <motion.div style={{ x: titleX }} className="relative flex w-full max-w-5xl flex-col items-center">
           <h1 className="sr-only">Personal Portfolio</h1>
-          <div className="pointer-events-none order-2 mt-2 lg:order-1 lg:mt-24">
-            <SwingWord
-              word="PERSONAL"
-              follow={follow}
-              stretch={stretch}
-              reduce={reduce}
-              delay={0.1}
-              align="end"
-            />
-          </div>
-          <div className="order-1 w-full lg:order-2 lg:w-[min(100%,280px)]">
+          <div className="relative w-full max-w-[34rem]">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
-          </div>
-          <div className="pointer-events-none order-3 mt-1 lg:order-3 lg:mt-24">
-            <SwingWord
-              word="PORTFOLIO"
-              follow={follow}
-              stretch={stretch}
-              reduce={reduce}
-              delay={0.18}
-              align="start"
-            />
+            <div className="pointer-events-none relative z-20 -mt-10 sm:-mt-16 lg:-mt-[4.5rem]">
+              <SwingWord
+                word="PERSONAL"
+                follow={follow}
+                stretch={stretch}
+                reduce={reduce}
+                delay={0.1}
+                align="center"
+              />
+              <SwingWord
+                word="PORTFOLIO"
+                follow={follow}
+                stretch={stretch}
+                reduce={reduce}
+                delay={0.18}
+                align="center"
+              />
+            </div>
           </div>
         </motion.div>
       </motion.div>
