@@ -36,10 +36,14 @@ export function Lanyard({
   src,
   leanX,
   leanY,
+  swingDeg,
+  stretch,
 }: {
   src: string
   leanX?: MotionValue<number>
   leanY?: MotionValue<number>
+  swingDeg?: MotionValue<number>
+  stretch?: MotionValue<number>
 }) {
   const reduce = useReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
@@ -83,7 +87,10 @@ export function Lanyard({
 
   function place(theta: number, radius: number) {
     ropeLen.set(radius)
-    ropeRot.set((theta * 180) / Math.PI)
+    const deg = (theta * 180) / Math.PI
+    ropeRot.set(deg)
+    swingDeg?.set(deg)
+    stretch?.set(radius / restRef.current)
   }
 
   function step(dt: number) {
