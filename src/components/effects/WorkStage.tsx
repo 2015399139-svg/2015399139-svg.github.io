@@ -65,13 +65,21 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
       const root = stageRef.current
       if (!root) return
       const box = root.getBoundingClientRect()
-      if (e.clientY < box.top || e.clientY > box.bottom) return
-      if (Math.abs(e.deltaX) < 6 && Math.abs(e.deltaY) < 14) return
+      const over =
+        e.clientX >= box.left &&
+        e.clientX <= box.right &&
+        e.clientY >= box.top &&
+        e.clientY <= box.bottom
+      if (!over) return
+      const ax = Math.abs(e.deltaX)
+      const ay = Math.abs(e.deltaY)
+      const sideways = e.shiftKey || ax > ay + 2
+      if (!sideways || ax + ay < 8) return
       e.preventDefault()
       const now = performance.now()
-      if (now - last < 480) return
+      if (now - last < 280) return
       last = now
-      const dir = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      const dir = e.shiftKey ? e.deltaY : e.deltaX
       go(activeRef.current + (dir > 0 ? 1 : -1))
     }
     window.addEventListener('wheel', onWheel, { passive: false })
