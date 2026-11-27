@@ -65,29 +65,31 @@ export function Hero() {
         className="relative z-20 mt-14 flex min-h-0 flex-1 flex-col items-center justify-center px-3 sm:mt-16 sm:px-4"
         style={{ y: leaveY, opacity: leaveOpacity, scale: leaveScale }}
       >
-        <motion.div style={{ x: titleX }} className="relative flex w-full flex-col">
+        <motion.div style={{ x: titleX }} className="relative flex w-full flex-col items-center">
           <h1 className="sr-only">Personal Portfolio</h1>
-          <motion.p
-            aria-hidden
-            className="hero-display-word relative z-0 mb-[-0.35rem] sm:mb-[-0.5rem]"
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.08, ease }}
-          >
-            Personal
-          </motion.p>
           <div className="relative z-10 w-full">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} />
           </div>
-          <motion.p
-            aria-hidden
-            className="hero-display-word relative z-0 mt-[-1.35rem] sm:mt-[-1.85rem]"
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.16, ease }}
-          >
-            Portfolio
-          </motion.p>
+          <div className="relative z-20 -mt-3 w-full sm:-mt-6 lg:-mt-8">
+            <motion.p
+              aria-hidden
+              className="hero-display-word"
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.08, ease }}
+            >
+              Personal
+            </motion.p>
+            <motion.p
+              aria-hidden
+              className="hero-display-word mt-[0.12em]"
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : 0.16, ease }}
+            >
+              Portfolio
+            </motion.p>
+          </div>
         </motion.div>
       </motion.div>
 
