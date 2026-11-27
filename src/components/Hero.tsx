@@ -34,21 +34,28 @@ function SwingLetter({
   const dist = i - mid
   const x = useTransform([follow, stretch], ([deg, t]) => {
     const rad = (Number(deg) * Math.PI) / 180
-    return Math.sin(rad) * 11 * dist * Number(t)
+    return Math.sin(rad) * 22 * dist * Number(t)
   })
   const y = useTransform([follow, stretch], ([deg, t]) => {
     const rad = (Number(deg) * Math.PI) / 180
-    return (1 - Math.cos(rad)) * (8 + Math.abs(dist) * 1.6) + (Number(t) - 1) * 26
+    return (1 - Math.cos(rad)) * (14 + Math.abs(dist) * 3.2) + (Number(t) - 1) * 42
   })
-  const rotate = useTransform(follow, (deg) => Number(deg) * 0.38)
+  const rotateZ = useTransform(follow, (deg) => Number(deg) * 0.55)
+  const rotateY = useTransform(follow, (deg) => Number(deg) * -0.9)
+  const skewX = useTransform(follow, (deg) => Number(deg) * -0.22)
+  const scale = useTransform([follow, stretch], ([deg, t]) => {
+    const pulse = 1 + Math.abs(Number(deg)) * 0.004
+    return pulse * (0.96 + Math.min(0.12, Math.abs(Number(t) - 1) * 0.35))
+  })
+  const z = useTransform(follow, (deg) => Math.cos((Number(deg) * Math.PI) / 180) * dist * -8)
 
   return (
     <motion.span
       className="hero-swing-letter"
-      initial={reduce ? false : { opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : delay, ease }}
-      style={reduce ? undefined : { x, y, rotate }}
+      initial={reduce ? false : { opacity: 0, y: 22, filter: 'blur(8px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: reduce ? 0 : 0.85, delay: reduce ? 0 : delay, ease }}
+      style={reduce ? undefined : { x, y, z, rotateZ, rotateY, skewX, scale }}
     >
       {ch}
     </motion.span>
@@ -103,7 +110,9 @@ export function Hero() {
   const sx = useSpring(mx, { stiffness: 42, damping: 18, mass: 0.6 })
   const swingDeg = useMotionValue(0)
   const stretch = useMotionValue(1)
-  const follow = useSpring(swingDeg, { stiffness: 62, damping: 13, mass: 0.55 })
+  const follow = useSpring(swingDeg, { stiffness: 48, damping: 11, mass: 0.7 })
+  const ribbonX = useTransform(follow, (d) => Number(d) * 2.4)
+  const ribbonSkew = useTransform(follow, (d) => Number(d) * 0.35)
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -154,7 +163,12 @@ export function Hero() {
           <h1 className="sr-only">Personal Portfolio</h1>
           <div className="relative w-full max-w-[34rem]">
             <Lanyard src={portraitSrc} leanX={mx} leanY={my} swingDeg={swingDeg} stretch={stretch} />
-            <div className="pointer-events-none relative z-20 -mt-10 sm:-mt-16 lg:-mt-[4.5rem]">
+            <div className="pointer-events-none relative z-20 -mt-10 sm:-mt-16 lg:-mt-[4.5rem] [perspective:900px]">
+              <motion.span
+                aria-hidden
+                className="absolute left-1/2 top-2 h-10 w-[min(88%,22rem)] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,246,239,0.45),rgba(253,38,1,0.2)_42%,transparent_72%)] blur-md"
+                style={{ x: ribbonX, skewX: ribbonSkew }}
+              />
               <SwingWord
                 word="PERSONAL"
                 follow={follow}

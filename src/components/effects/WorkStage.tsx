@@ -65,21 +65,13 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
       const root = stageRef.current
       if (!root) return
       const box = root.getBoundingClientRect()
-      const over =
-        e.clientX >= box.left &&
-        e.clientX <= box.right &&
-        e.clientY >= box.top &&
-        e.clientY <= box.bottom
-      if (!over) return
-      const ax = Math.abs(e.deltaX)
-      const ay = Math.abs(e.deltaY)
-      const sideways = e.shiftKey || ax > ay + 2
-      if (!sideways || ax + ay < 8) return
+      if (e.clientY < box.top || e.clientY > box.bottom) return
+      if (Math.abs(e.deltaX) < 6 && Math.abs(e.deltaY) < 14) return
       e.preventDefault()
       const now = performance.now()
-      if (now - last < 280) return
+      if (now - last < 480) return
       last = now
-      const dir = e.shiftKey ? e.deltaY : e.deltaX
+      const dir = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
       go(activeRef.current + (dir > 0 ? 1 : -1))
     }
     window.addEventListener('wheel', onWheel, { passive: false })
@@ -116,7 +108,7 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
               精选作品
             </h2>
             <p className="mt-2 max-w-md text-sm leading-relaxed text-[#d7c2b4]">
-              拖动或按方向键转动。中间那件点开进专题。
+              滚轮、拖动或方向键转动。中间那件点开进专题。
             </p>
           </div>
           <p className="hidden font-display text-[11px] tracking-[0.2em] text-[#ffb089] sm:block">
@@ -131,48 +123,58 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
         className="pointer-events-none relative mx-auto mt-2 h-[26rem] max-w-[76rem] overflow-hidden touch-pan-y select-none sm:h-[30rem] md:h-[36rem]"
       >
         {!reduce ? <WarmParticles mode="stage" /> : null}
-        <div
-          className="pointer-events-none absolute bottom-[18%] left-1/2 z-0 h-28 w-[min(70%,36rem)] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(253,38,1,0.28),rgba(243,126,28,0.12)_42%,transparent_70%)] blur-2xl"
+        <p
           aria-hidden
-        />
-
+          className="pointer-events-none absolute left-1/2 top-[42%] z-0 -translate-x-1/2 -translate-y-1/2 font-anton text-[28vw] leading-none text-white/[0.045] md:text-[9.5rem]"
+        >
+          {pad(active + 1)}
+        </p>
         <div className="work-orbit pointer-events-none absolute inset-0">
-          <div
-            className="work-orbit-ring"
-            style={{ transform: `rotateY(${-active * step}deg)` }}
-          >
-            {pieces.map((item, i) => {
-              const on = i === active
-              return (
-                <button
-                  key={item.slug}
-                  type="button"
-                  aria-current={on ? 'true' : undefined}
-                  aria-label={`${item.title}，查看专题`}
-                  className={`work-orbit-item pointer-events-auto ${on ? 'work-orbit-item-on' : ''}`}
-                  style={{ transform: `rotateY(${i * step}deg) translateZ(var(--orbit-r))` }}
-                  onPointerDown={onDown}
-                  onPointerMove={onMove}
-                  onPointerUp={onUp}
-                  onPointerCancel={onUp}
-                  onClick={() => {
-                    if (drag.current.moved) return
-                    if (on) onOpen(projects[i])
-                    else go(i)
-                  }}
-                >
-                  <span className="work-orbit-card">
-                    <img src={face(item)} alt="" draggable={false} loading="lazy" decoding="async" />
-                    <span className="work-orbit-meta">
-                      <span>
-                        {pad(i + 1)} · {item.discipline}
+          <div className="work-orbit-scene">
+            {!reduce ? <div className="work-orbit-floor" aria-hidden /> : null}
+            <div
+              className="work-orbit-ring"
+              style={{ transform: `rotateY(${-active * step}deg)` }}
+            >
+              {pieces.map((item, i) => {
+                const on = i === active
+                const src = face(item)
+                return (
+                  <button
+                    key={item.slug}
+                    type="button"
+                    aria-current={on ? 'true' : undefined}
+                    aria-label={`${item.title}，查看专题`}
+                    className={`work-orbit-item pointer-events-auto ${on ? 'work-orbit-item-on' : ''}`}
+                    style={{ transform: `rotateY(${i * step}deg) translateZ(var(--orbit-r))` }}
+                    onPointerDown={onDown}
+                    onPointerMove={onMove}
+                    onPointerUp={onUp}
+                    onPointerCancel={onUp}
+                    onClick={() => {
+                      if (drag.current.moved) return
+                      if (on) onOpen(projects[i])
+                      else go(i)
+                    }}
+                  >
+                    <span className="work-orbit-card">
+                      <img src={src} alt="" draggable={false} loading="lazy" decoding="async" />
+                      <span className="work-orbit-shine" aria-hidden />
+                      <span className="work-orbit-rim" aria-hidden />
+                      <span className="work-orbit-meta">
+                        <span>
+                          {pad(i + 1)} · {item.discipline}
+                        </span>
+                        <strong>{item.title}</strong>
                       </span>
-                      <strong>{item.title}</strong>
                     </span>
-                  </span>
-                </button>
-              )
-            })}
+                    <span className="work-orbit-reflect" aria-hidden>
+                      <img src={src} alt="" draggable={false} />
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -180,9 +182,9 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
       <div className="mx-auto mt-4 max-w-[40rem] px-5 text-center md:mt-6">
         <motion.div
           key={piece.slug}
-          initial={reduce ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28 }}
+          initial={reduce ? false : { opacity: 0, y: 16, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-[#ffb089]">{piece.discipline}</p>
           <p className="mt-2 font-display text-xl font-semibold tracking-[-0.03em] text-[#fff6ef] md:text-2xl">
