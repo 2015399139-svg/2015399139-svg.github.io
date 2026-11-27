@@ -120,7 +120,7 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
 
       <div
         ref={stageRef}
-        className="pointer-events-none relative mx-auto mt-2 h-[26rem] max-w-[76rem] overflow-hidden touch-pan-y select-none sm:h-[30rem] md:h-[36rem]"
+        className="pointer-events-none relative mx-auto mt-2 h-[30rem] max-w-[76rem] overflow-x-clip overflow-y-visible touch-pan-y select-none sm:h-[34rem] md:h-[40rem]"
       >
         {!reduce ? <WarmParticles mode="stage" /> : null}
         <p
@@ -167,9 +167,6 @@ export function WorkStage({ onOpen }: { onOpen: Open }) {
                         </span>
                         <strong>{item.title}</strong>
                       </span>
-                    </span>
-                    <span className="work-orbit-reflect" aria-hidden>
-                      <img src={src} alt="" draggable={false} />
                     </span>
                   </button>
                 )
