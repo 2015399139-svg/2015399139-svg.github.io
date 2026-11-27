@@ -1,4 +1,5 @@
-import { useEffect, useRef, type RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
+import { publicAsset } from '../../data/profile'
 
 type Props = {
   src: string
@@ -13,7 +14,12 @@ type ModelViewerEl = HTMLElement & {
   toneMapping: string
   cameraOrbit: string
   fieldOfView: string
+  loaded: boolean
   jumpCameraToGoal: () => void
+}
+
+type ModelViewerCtor = CustomElementConstructor & {
+  dracoDecoderLocation: string
 }
 
 /** 约 400% 画面占比；半径锁死，禁止缩放到背面/底部 */
@@ -21,6 +27,7 @@ const ORBIT = '22deg 70deg 17%'
 const FOV = '32deg'
 const MIN_ORBIT = '-40deg 52deg 17%'
 const MAX_ORBIT = '85deg 82deg 17%'
+const EXPOSURE = 0.48
 
 /** 正面来回摆动，不绕到背面 */
 const SWAY_CENTER = 22
@@ -29,21 +36,46 @@ const SWAY_PHI = 70
 const SWAY_RADIUS = '17%'
 const SWAY_PERIOD_MS = 14000
 
+function dracoPath() {
+  const base = publicAsset('draco')
+  return base.endsWith('/') ? base : `${base}/`
+}
+
+function ensureDracoLocation() {
+  const path = dracoPath()
+  const g = globalThis as typeof globalThis & {
+    ModelViewerElement?: { dracoDecoderLocation?: string }
+  }
+  g.ModelViewerElement = g.ModelViewerElement || {}
+  g.ModelViewerElement.dracoDecoderLocation = path
+  const Ctor = customElements.get('model-viewer') as ModelViewerCtor | undefined
+  if (Ctor) Ctor.dracoDecoderLocation = path
+  return path
+}
+
 /** 网页里直接转的 glTF 预览。不可缩放，也不能转到背面和底部。 */
 export function BlendViewer({ src, poster, className = '' }: Props) {
   const ref = useRef<ModelViewerEl | null>(null)
+  const [ready, setReady] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
+    ensureDracoLocation()
     if (customElements.get('model-viewer')) return
-    void import('@google/model-viewer')
+    void import('@google/model-viewer').then(() => {
+      ensureDracoLocation()
+    })
   }, [])
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    setReady(false)
+    setFailed(false)
+    ensureDracoLocation()
 
     const applyLook = () => {
-      el.exposure = 0.24
+      el.exposure = EXPOSURE
       el.shadowIntensity = 2
       el.shadowSoftness = 0.5
       el.toneMapping = 'agx'
@@ -51,17 +83,33 @@ export function BlendViewer({ src, poster, className = '' }: Props) {
       el.cameraOrbit = ORBIT
       el.fieldOfView = FOV
       el.jumpCameraToGoal?.()
+      if (el.loaded) setReady(true)
+    }
+
+    const onLoad = () => {
+      applyLook()
+      setReady(true)
+      setFailed(false)
+    }
+    const onError = () => {
+      setFailed(true)
+      setReady(false)
     }
 
     applyLook()
-    el.addEventListener('load', applyLook)
-    return () => el.removeEventListener('load', applyLook)
+    if (el.loaded) onLoad()
+    el.addEventListener('load', onLoad)
+    el.addEventListener('error', onError)
+    return () => {
+      el.removeEventListener('load', onLoad)
+      el.removeEventListener('error', onError)
+    }
   }, [src])
 
   // 自定义正面摇摆：替代原生 auto-rotate（会绕整圈到背面）
   useEffect(() => {
     const el = ref.current
-    if (!el) return
+    if (!el || !ready) return
 
     let raf = 0
     let paused = false
@@ -98,10 +146,20 @@ export function BlendViewer({ src, poster, className = '' }: Props) {
       el.removeEventListener('pointerleave', resume)
       el.removeEventListener('touchend', resume)
     }
-  }, [src])
+  }, [src, ready])
 
   return (
-    <div className={`overflow-hidden rounded-[1.15rem] bg-[#0a0402] ring-1 ring-white/10 ${className}`}>
+    <div className={`relative overflow-hidden rounded-[1.15rem] bg-[#0a0402] ring-1 ring-white/10 ${className}`}>
+      {!ready && !failed ? (
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-0.5 overflow-hidden bg-white/10">
+          <span className="block h-full w-1/3 animate-pulse bg-[#ffb089]/80" />
+        </div>
+      ) : null}
+      {failed ? (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a0402]/88 px-4 text-center text-sm text-[#d7c2b4]">
+          三维预览加载失败，请刷新重试
+        </div>
+      ) : null}
       <model-viewer
         ref={ref as unknown as RefObject<HTMLElement>}
         src={src}
@@ -113,7 +171,7 @@ export function BlendViewer({ src, poster, className = '' }: Props) {
         touch-action="pan-y"
         shadow-intensity="2"
         shadow-softness="0.5"
-        exposure="0.24"
+        exposure={String(EXPOSURE)}
         tone-mapping="agx"
         environment-image="neutral"
         interaction-prompt="auto"

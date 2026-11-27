@@ -18,6 +18,11 @@
       content="个人作品集 — 交互、动效与创意开发的展示空间"
     />
     <title>朱成斌</title>
+    <!-- Draco 解码器走本站，避免 gstatic CDN 在国内加载失败 -->
+    <script>
+      self.ModelViewerElement = self.ModelViewerElement || {}
+      self.ModelViewerElement.dracoDecoderLocation = '/draco/'
+    </script>
   </head>
   <body>
     <div id="root">

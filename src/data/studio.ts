@@ -60,7 +60,7 @@ export const studioPieces: StudioPiece[] = [
     slug: 'water-garden',
     title: '水岸庭院',
     discipline: '渲染',
-    desc: '从 Blender 场景导出的可交互预览。拖动环顾，滚轮拉近。',
+    desc: '从 Blender 场景导出的可交互预览。拖动环顾水岸，正面轻摆。',
     tags: ['Blender', '场景', '可交互'],
     accent: 'from-[#7eb8d4]/40 to-[#fd2601]/20',
     year: '2026',
