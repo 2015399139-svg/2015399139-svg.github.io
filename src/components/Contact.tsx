@@ -9,7 +9,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="relative z-[2] overflow-hidden bg-[#140a07] px-5 pb-28 pt-6 md:px-10 md:pb-32 md:pt-10 lg:px-12"
+      className="relative z-[2] scroll-mt-28 overflow-hidden bg-[#140a07] px-5 pb-28 pt-6 md:px-10 md:pb-32 md:pt-10 lg:px-12"
     >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[min(42vh,18rem)] bg-[radial-gradient(ellipse_70%_80%_at_50%_0%,rgba(253,38,1,0.14),transparent_70%)]"
