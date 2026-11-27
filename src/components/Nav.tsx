@@ -68,10 +68,11 @@ export function Nav() {
         <nav aria-label="主导航" className="flex items-center justify-between gap-2 text-white sm:gap-4">
           <Link
             to="/"
-            className="min-w-0 shrink truncate font-sans text-[10px] font-medium uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.38em]"
+            className="inline-flex min-w-0 shrink items-center gap-2 truncate font-sans text-[10px] font-medium uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.38em]"
             onClick={closeMenu}
           >
-            ✱ Zhuchengbin
+            <img src={publicAsset('favicon.svg')} alt="" width={16} height={16} className="size-4 rounded-[4px]" />
+            Zhuchengbin
           </Link>
 
           <ul className="hidden items-center gap-8 lg:flex">
@@ -184,9 +185,10 @@ export function Nav() {
       >
         <Link
           to="/"
-          className="min-w-0 shrink font-display text-[0.95rem] font-semibold tracking-[-0.02em] text-white [-webkit-tap-highlight-color:transparent]"
+          className="inline-flex min-w-0 shrink items-center gap-2 font-display text-[0.95rem] font-semibold tracking-[-0.02em] text-white [-webkit-tap-highlight-color:transparent]"
           onClick={closeMenu}
         >
+          <img src={publicAsset('favicon.svg')} alt="" width={18} height={18} className="size-[18px] rounded-[5px]" />
           Portfolio
         </Link>
 
