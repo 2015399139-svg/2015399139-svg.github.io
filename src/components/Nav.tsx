@@ -71,7 +71,7 @@ export function Nav() {
             className="inline-flex min-w-0 shrink items-center gap-2 truncate font-sans text-[10px] font-medium uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.38em]"
             onClick={closeMenu}
           >
-            <img src={publicAsset('favicon.svg')} alt="" width={20} height={20} className="size-5 rounded-[5px] shadow-[0_0_0_1px_rgba(255,255,255,0.28)]" />
+            <img src={publicAsset('favicon-64.png')} alt="" width={20} height={20} className="size-5 rounded-[6px] object-cover shadow-[0_0_0_1px_rgba(255,255,255,0.32)]" />
             Zhuchengbin
           </Link>
 
@@ -188,7 +188,7 @@ export function Nav() {
           className="inline-flex min-w-0 shrink items-center gap-2 font-display text-[0.95rem] font-semibold tracking-[-0.02em] text-white [-webkit-tap-highlight-color:transparent]"
           onClick={closeMenu}
         >
-          <img src={publicAsset('favicon.svg')} alt="" width={20} height={20} className="size-5 rounded-[5px] shadow-[0_0_0_1px_rgba(255,255,255,0.2)]" />
+          <img src={publicAsset('favicon-64.png')} alt="" width={20} height={20} className="size-5 rounded-[6px] object-cover shadow-[0_0_0_1px_rgba(255,255,255,0.24)]" />
           Portfolio
         </Link>
 
